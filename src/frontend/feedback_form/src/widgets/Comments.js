@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, FormControl, Image, Panel} from "react-bootstrap";
 import InstructionsAlert from "../main_layout/InstructionsAlert";
-import {WIDGET} from "../main_layout/menu_and_widgets/constants";
 import {connect} from "react-redux";
 import {setComments, setIsCommentsSavedToDB} from "../redux/actions/commentsActions";
 import {getComments, isCommentsSavedToDB} from "../redux/selectors/commentsSelectors";

@@ -6,21 +6,8 @@ import {
 } from "react-bootstrap";
 import MultipleSelect from "../components/multiselect/MultiSelect";
 import InstructionsAlert from "../main_layout/InstructionsAlert";
-import {
-    addGene,
-    addSpecies,
-    removeGene,
-    removeSpecies,
-    setGeneModel, setIsOverviewSavedToDB,
-    toggleGeneModel
-} from "../redux/actions/overviewActions";
-import {getGeneModel, getGenes, getSpecies, isOverviewSavedToDB} from "../redux/selectors/overviewSelectors";
-import {connect} from "react-redux";
-import {DataManager} from "../lib/DataManager";
-import {getCheckboxDBVal, transformEntitiesIntoAfpString} from "../AFPValues";
-import {setLoading, showDataSaved, unsetLoading} from "../redux/actions/displayActions";
 
-class Overview extends React.Component {
+class EntitySelect extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -29,24 +16,18 @@ class Overview extends React.Component {
     }
 
     render() {
-        const geneTooltip = (
+        const tooltip = (
             <Tooltip id="tooltip">
-                Please validate the list of genes in your paper in the box below by adding or removing genes if required. Only genes mentioned 2 or more times are extracted
+                {this.props.tooltipText}
             </Tooltip>
         );
-
-        const speciesTooltip = (
-            <Tooltip id="tooltip">
-                Please validate the list of species in your paper in the box below by adding or removing species if required. Only species mentioned 10 or more times are extracted
-            </Tooltip>
-        );
-        let geneListComponent;
+        let listComponent;
         if (this.props.hideGenes) {
-            geneListComponent = (<Alert bsStyle="warning">More than 100 genes were extracted from the paper and they were omitted from the Author First Pass interface. If you would like to validate the list of genes click <a onClick={() => {
+            listComponent = (<Alert bsStyle="warning">More than 100 genes were extracted from the paper and they were omitted from the Author First Pass interface. If you would like to validate the list of genes click <a onClick={() => {
                 this.props.toggleEntityVisibilityCallback("hide_genes")
             }}>here</a>. If you prefer not to, all the genes extracted will be associated to this paper in WormBase</Alert>);
         } else {
-            geneListComponent = (
+            listComponent = (
             <MultipleSelect
                 itemsNameSingular={"gene"}
                 itemsNamePlural={"genes"}
@@ -180,12 +161,4 @@ class Overview extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    genes: getGenes(state).elements,
-    geneModel: getGeneModel(state),
-    species: getSpecies(state).elements,
-    isSavedToDB: isOverviewSavedToDB(state)
-});
-
-export default connect(mapStateToProps, {addGene, removeGene, addSpecies, removeSpecies, setGeneModel, toggleGeneModel,
-    setIsOverviewSavedToDB, showDataSaved, setLoading, unsetLoading})(Overview);
+export default EntitySelect;
